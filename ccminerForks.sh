@@ -27,7 +27,7 @@ minerRoot="/root/miner_org/"
 smosMiners="$(find $minerRoot -name 'ccminer' -printf '%h\n' | sed 's!.*/!!' | sort -u)"
 URL="https://api.github.com/repos/greerso/scrypts/contents/miners"
 declare -A githubJSON="($(
-  curl -sS "${URL}" \
+  curl -fsSL "${URL}" \
   | jq '.[]  | "[" + .name + "]=\"" +.download_url + "\""' -r 
 ))"
 IFS=$'\n' read -r -d '' -a githubMiners < <(set -o pipefail; curl --fail -kfsSL "https://api.github.com/repos/greerso/scrypts/contents/miners" | jq -r '.[].name' && printf '\0')
@@ -55,10 +55,16 @@ minerForkURL=${githubJSON[$minerFork.gz]}
 mv $minerRoot$smosMiner/ccminer $minerRoot$smosMiner/$smosMiner
 curl -fsSL $minerForkURL | gunzip > $minerRoot$smosMiner/$minerFork
 chmod +x $minerRoot$smosMiner/$minerFork
+chown miner:miner $minerRoot$smosMiner/$minerFork
 ln -s $minerRoot$smosMiner/$minerFork $minerRoot$smosMiner/ccminer
 
 clear
-
+echo "###"
 echo "$smosMiner is now $minerFork!"
+echo "###"
+echo ""
 $minerRoot$smosMiner/ccminer --version
+echo ""
+echo "###"
 echo "You should now configure your Rig Group for $smosMiner remembering that it is $minerFork"
+echo "###"

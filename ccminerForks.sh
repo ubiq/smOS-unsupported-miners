@@ -25,17 +25,18 @@ inputWithDefault() {
 # Location of smOS miners
 minerRoot="/root/miner_org/"
 smosMiners="$(find $minerRoot -name 'ccminer' -printf '%h\n' | sed 's!.*/!!' | sort -u)"
-# minerRepo='https://github.com/greerso/scrypts/raw/master/miners/'
-IFS=$'\n' read -r -d '' -a githubMiners < <(set -o pipefail; curl --fail -k "https://api.github.com/repos/greerso/scrypts/contents/miners" | jq -r '.[].name' && printf '\0')
-githubURLs="$(curl -s https://api.github.com/repos/greerso/scrypts/contents/miners | jq -r '.[].download_url')"
+URL="https://api.github.com/repos/greerso/scrypts/contents/miners"
+declare -A githubJSON="($(
+  curl -sS "${URL}" \
+  | jq '.[]  | "[" + .name + "]=\"" +.download_url + "\""' -r 
+))"
+IFS=$'\n' read -r -d '' -a githubMiners < <(set -o pipefail; curl --fail -kfsSL "https://api.github.com/repos/greerso/scrypts/contents/miners" | jq -r '.[].name' && printf '\0')
 
 clear
 
 # Which smOS miner to replace?
 printf "Please select the miner to replace:\n"
 select smosMiner in $smosMiners; do test -n "$smosMiner" && break; echo ">>> Invalid Selection"; done
-
-echo "You selected $smosMiner"
 
 clear
 
@@ -49,12 +50,12 @@ echo "You're replacing $smosMiner with $minerFork"
 # Download miner
 #
 
-minerForkURL="$(curl -s https://api.github.com/repos/greerso/scrypts/contents/miners | jq -r '.[] | select(.name=="$minerFork") | .download_url')"
+minerForkURL=${githubJSON[$minerFork.gz]}
 
-mv $minerRoot$smosMiner/ccminer $minerRoot$smosMiner/ccminer.$smosMiner
-curl -fsSL $minerForkURL | gunzip > $minerRoot$smosMiner/ccminer.$minerFork
-chmod +x $minerRoot$smosMiner/ccminer.$minerFork
-ln -s $minerRoot$smosMiner/ccminer.$minerFork $minerRoot$smosMiner/ccminer
+mv $minerRoot$smosMiner/ccminer $minerRoot$smosMiner/$smosMiner
+curl -fsSL $minerForkURL | gunzip > $minerRoot$smosMiner/$minerFork
+chmod +x $minerRoot$smosMiner/$minerFork
+ln -s $minerRoot$smosMiner/$minerFork $minerRoot$smosMiner/ccminer
 
 clear
 

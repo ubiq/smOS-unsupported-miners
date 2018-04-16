@@ -60,5 +60,5 @@ ln -s $minerRoot$smosMiner/$minerFork $minerRoot$smosMiner/ccminer
 clear
 
 echo "$smosMiner is now $minerFork!"
-$minerRoot$smosMiner/ccminer -v
+$minerRoot$smosMiner/ccminer --version
 echo "You should now configure your Rig Group for $smosMiner remembering that it is $minerFork"

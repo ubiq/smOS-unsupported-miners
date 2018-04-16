@@ -23,7 +23,7 @@ inputWithDefault() {
 #
 
 # Location of smOS miners
-minerRoot='/root/miner_org/'
+minerRoot="/root/miner_org/"
 smosMiners="$(find $minerRoot -name 'ccminer' -printf '%h\n' | sed 's!.*/!!' | sort -u)"
 # minerRepo='https://github.com/greerso/scrypts/raw/master/miners/'
 githubMiners="$(curl -s https://api.github.com/repos/greerso/scrypts/contents/miners | jq '.[].name')"
@@ -51,13 +51,13 @@ echo "You're replacing $smosMiner with $minerFork"
 
 minerForkURL="$(curl -s https://api.github.com/repos/greerso/scrypts/contents/miners | jq '.[] | select(.name=="$minerFork") | .download_url')"
 
-mv $minerRoot/$smosMiner/ccminer $minerRoot/$smosMiner/ccminer.$smosMiner
-curl -fsSL $minerForkURL | gunzip > $minerRoot/$smosMiner/ccminer.$minerFork
-chmod +x $minerRoot/$smosMiner/ccminer.$minerFork
-ln -s $minerRoot/$smosMiner/ccminer.$minerFork $minerRoot/$smosMiner/ccminer
+mv $minerRoot$smosMiner/ccminer $minerRoot$smosMiner/ccminer.$smosMiner
+curl -fsSL $minerForkURL | gunzip > $minerRoot$smosMiner/ccminer.$minerFork
+chmod +x $minerRoot$smosMiner/ccminer.$minerFork
+ln -s $minerRoot$smosMiner/ccminer.$minerFork $minerRoot$smosMiner/ccminer
 
 clear
 
 echo "$smosMiner is now $minerFork!"
-$minerRoot/$smosMiner/ccminer -v
+$minerRoot$smosMiner/ccminer -v
 echo "You should now configure your Rig Group for $smosMiner remembering that it is $minerFork"

@@ -29,6 +29,8 @@ smosMiners="$(find $minerRoot -name 'ccminer' -printf '%h\n' | sed 's!.*/!!' | s
 githubMiners="$(curl -s https://api.github.com/repos/greerso/scrypts/contents/miners | jq '.[].name')"
 githubURLs="$(curl -s https://api.github.com/repos/greerso/scrypts/contents/miners | jq '.[].download_url')"
 
+clear
+
 # Which smOS miner to replace?
 printf "Please select the miner to replace:\n"
 select smosMiner in $smosMiners; do test -n "$smosMiner" && break; echo ">>> Invalid Selection"; done
@@ -49,10 +51,13 @@ echo "You're replacing $smosMiner with $minerFork"
 
 minerForkURL="$(curl -s https://api.github.com/repos/greerso/scrypts/contents/miners | jq '.[] | select(.name=="$minerFork") | .download_url')"
 
-mv $smosMiner/ccminer $smosMiner/ccminer.backup
-curl -fsSL $minerForkURL | gunzip > $smosMiner/ccminer
-chmod +x $smosMiner/ccminer
+mv $minerRoot/$smosMiner/ccminer $minerRoot/$smosMiner/ccminer.$smosMiner
+curl -fsSL $minerForkURL | gunzip > $minerRoot/$smosMiner/ccminer.$minerFork
+chmod +x $minerRoot/$smosMiner/ccminer.$minerFork
+ln -s $minerRoot/$smosMiner/ccminer.$minerFork $minerRoot/$smosMiner/ccminer
 
 clear
 
-echo "$smosMiner is now $minerFork!  You should now configure your Rig Group for $smosMiner remembering that it is $minerFork"
+echo "$smosMiner is now $minerFork!"
+$minerRoot/$smosMiner/ccminer -v
+echo "You should now configure your Rig Group for $smosMiner remembering that it is $minerFork"

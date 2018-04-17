@@ -24,7 +24,7 @@ inputWithDefault() {
 
 # Location of smOS miners
 minerRoot="/root/miner_org/"
-smosMiners="$(find $minerRoot -name 'ccminer' -printf '%h\n' | sed 's!.*/!!' | sort -u)"
+smosMiners=($(ls $minerRoot))
 URL="https://api.github.com/repos/greerso/scrypts/contents/miners"
 declare -A githubJSON="($(
   curl -fsSL "${URL}" \
@@ -36,8 +36,8 @@ clear
 
 # Which smOS miner to replace?
 printf "Please select the miner to replace:\n"
-select smosMiner in $smosMiners; do test -n "$smosMiner" && break; echo ">>> Invalid Selection"; done
-
+select smosMiner in ${smosMiners[@]}; do test -n "$smosMiner" && break; echo ">>> Invalid Selection"; done
+smosMinerBin="$(find $minerRoot$smosMiner/ -maxdepth 1 -type f -size +512k -executable -printf "%f\n" -quit)"
 clear
 
 # Which miner to replace $smosMiner with?
@@ -52,18 +52,18 @@ echo "You're replacing $smosMiner with $minerFork"
 
 minerForkURL=${githubJSON[$minerFork.gz]}
 
-mv $minerRoot$smosMiner/ccminer $minerRoot$smosMiner/$smosMiner
+mv $minerRoot$smosMiner/$smosMinerBin $minerRoot$smosMiner/$smosMiner.backup
 curl -fsSL $minerForkURL | gunzip > $minerRoot$smosMiner/$minerFork
 chmod +x $minerRoot$smosMiner/$minerFork
 chown miner:miner $minerRoot$smosMiner/$minerFork
-ln -s $minerRoot$smosMiner/$minerFork $minerRoot$smosMiner/ccminer
+ln -s $minerRoot$smosMiner/$minerFork $minerRoot$smosMiner/$smosMinerBin
 
 clear
 echo "###"
 echo "$smosMiner is now $minerFork!"
 echo "###"
 echo ""
-$minerRoot$smosMiner/ccminer --version
+$minerRoot$smosMiner/$smosMinerBin --version
 echo ""
 echo "###"
 echo "You should now configure your Rig Group for $smosMiner remembering that it is $minerFork"

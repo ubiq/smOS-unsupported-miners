@@ -1,4 +1,4 @@
-# scrypts
+# Install unsuppported miners in smOS
 bash scripts for crypto projects
 
 Execute the following command as root from your smOS CLI.

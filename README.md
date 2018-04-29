@@ -18,5 +18,7 @@ sudo bash -c "$(curl https://raw.githubusercontent.com/greerso/smOS-unsupported-
 *It is not recomended to run a script this way unless you trust the source.  Please take the time to read the script and do not execute it unless you understand exactly what it is doing.
 
 ETH: 0x0f64257fAA9E5E36428E5BbB44C9A2aE3A055577
+
 ZEN: zndLiWRo7cYeAKuPArtpQ6HNPi6ZdaTmLFL
+
 BTC: 1BzrkEMSF4aXBtZ19DhVf8KMPVkXjXaAPG

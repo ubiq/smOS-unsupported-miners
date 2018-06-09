@@ -92,7 +92,7 @@ echo "###"
 echo "$smosMiner is now $minerFork!"
 echo "###"
 echo ""
-$minerRoot$smosMiner/$smosMinerBin --version
+# $minerRoot$smosMiner/$smosMinerBin --version
 echo ""
 echo "###"
 echo "You should now configure your Rig Group for $smosMiner remembering that it is $minerFork"

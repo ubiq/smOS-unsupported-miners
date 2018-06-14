@@ -1,7 +1,11 @@
 # Install unsuppported miners in smOS
 I am not affilliated with the Simpleminer team in any way.  Just a guy that wants access to the latest miners in smos.
 
-The script will list the miners currently install in smOS /root/miners_org and ask which you would like to replace. It will then check my GitHub repository for new miners and ask which you would like to add to smOS. It will then make a backup of the existing miner, download the new miner and create a symlink in the selected directory.
+The script will list the miners currently install in smOS /root/miners_org and ask which you would 
+like to replace. It will then check my GitHub repository for new miners and ask which you would like 
+to add to smOS. It will then make a backup of the existing miner, download the new miner and create a 
+symlink in the selected directory.  Try to replace with similar, if you're adding a variant of 
+sgminer, replace sgminer, same for ccminer etc.  Do not try to replace Claymore miners.
 
 Once this is done, you can use smOS gui to make a new rig group for the miner that you replaced but remember it is not the miner that smOS thinks it is, it is the one that you replaced it with.
 

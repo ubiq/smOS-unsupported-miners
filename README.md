@@ -1,6 +1,8 @@
 # Install unsuppported miners in smOS
 I am not affilliated with the Simpleminer team in any way.  Just a guy that wants access to the latest miners in smos.
 
+I have started The Unofficial smOS Discord at https://discord.gg/qJJysxR
+
 The script will list the miners currently install in smOS /root/miners_org and ask which you would 
 like to replace. It will then check my GitHub repository for new miners and ask which you would like 
 to add to smOS. It will then make a backup of the existing miner, download the new miner and create a 

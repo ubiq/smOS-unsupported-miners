@@ -74,18 +74,6 @@ clear
 # ---------------------------------------------------------------------------------------
 
 # =======================================================================================
-# Install OhGodAnETHlargementPill
-# =======================================================================================
-read -p "Would you like to install and run OhGodAnETHlargementPill? " choice
-case "$choice" in 
-  y|Y ) curl -L -o /root/utils/OhGodAnETHlargementPill https://github.com/OhGodACompany/OhGodAnETHlargementPill/raw/master/OhGodAnETHlargementPill-r2
-  echo "To run OhGodAnETHlargementPill run 'screen -dmS OhGodAnETHlargementPill sudo /root/utils/OhGodAnETHlargementPill --revA 0,3,4' where 0,3,4 are cards with RAM that is not DDR5"
-  ;;
-	* ) echo "skipped";;
-esac
-# ---------------------------------------------------------------------------------------
-
-# =======================================================================================
 # Done.
 # =======================================================================================
 echo "###"

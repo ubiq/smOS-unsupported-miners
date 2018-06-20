@@ -3,23 +3,76 @@
 # =======================================================================================
 # Run as root
 # =======================================================================================
-if [[ $(whoami) != "root" ]]; then
-    echo "Please run this script as root user"
-    exit 1
+if [ "$(id -nu)" != "root" ]; then
+	sudo -k
+	PASSWORD=$(whiptail --backtitle "$PROJECT_NAME Masternode Installer" --title "Authentication required" --passwordbox "Installing $PROJECT_NAME requires root privilege. Please authenticate to begin the installation.\n\n[sudo] Password for user $USER:" 12 50 )
+	exec sudo -E -S -p '' "$0" "$@" <<< "$PASSWORD"
+	exit 1
 fi
 # ---------------------------------------------------------------------------------------
 
 # =======================================================================================
 # Helper functions
 # =======================================================================================
-# Ask user for input, offer a default value example use:
-# echo "Please enter a value: (Default: new_value)"
-# newValue=$(inputWithDefault new_value)
-inputWithDefault() {
-    read -r userInput
-    userInput=${userInput:-$@}
-    echo "$userInput"
+# infobox TEXT
+infobox() {
+    BASE_LINES=10
+    WT_HEIGHT=$(echo -e "$@" | wc -l)
+    (( WT_HEIGHT=WT_HEIGHT+BASE_LINES ))
+    WT_WIDTH=78
+    WT_SIZE="$WT_HEIGHT $WT_WIDTH"
+    TERM=ansi whiptail \
+    --infobox "$@" \
+    --backtitle "$WT_BACKTITLE" \
+    --title "$WT_TITLE" \
+    $WT_SIZE
 }
+
+# msgbox TEXT
+msgbox() {
+    BASE_LINES=10
+    WT_HEIGHT=$(echo -e "$@" | wc -l)
+    (( WT_HEIGHT=WT_HEIGHT+BASE_LINES ))
+    WT_WIDTH=78
+    WT_SIZE="$WT_HEIGHT $WT_WIDTH"
+    TERM=ansi whiptail \
+    --msgbox "$@" \
+    --backtitle "$WT_BACKTITLE" \
+    --title "$WT_TITLE" \
+    $WT_SIZE
+}
+
+# inputbox "TEXT" "DEFAULT"
+inputbox() {
+    BASE_LINES=10
+    WT_HEIGHT=$(echo -e "$@" | wc -l)
+    (( WT_HEIGHT=WT_HEIGHT+BASE_LINES ))
+    WT_WIDTH=78
+    WT_SIZE="$WT_HEIGHT $WT_WIDTH"
+    TERM=ansi whiptail \
+    --inputbox "$1" \
+    --backtitle "$WT_BACKTITLE" \
+    --title "$WT_TITLE" \
+    3>&1 1>&2 2>&3 \
+    $WT_SIZE \
+    "$2"
+}
+
+# yesnobox TEXT
+yesnobox() {
+BASE_LINES=8
+WT_HEIGHT=$(echo -e "$@" | wc -l)
+(( WT_HEIGHT=WT_HEIGHT+BASE_LINES ))
+WT_WIDTH=78
+WT_SIZE="$WT_HEIGHT $WT_WIDTH"
+TERM=ansi whiptail \
+--yesno "$@" \
+--backtitle "$WT_BACKTITLE" \
+--title "$WT_TITLE" \
+
+$WT_SIZE
+}
+
 # ---------------------------------------------------------------------------------------
 
 # =======================================================================================

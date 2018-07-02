@@ -5,7 +5,12 @@ commands.
 
 I have started [The Unofficial Mining Distro Discord](https://discord.gg/qJJysxR)
 
-The script will list the miners currently install in smOS /root/miners_org and ask which you would 
+In the latest version of smOS, miners do not download until you try to use them, so you must first 
+configure a rig group and attempt to mine with the miner that you would like to replace in order 
+for it to download to the miners_org directory.
+
+The script will list the miners currently install in 
+smOS /root/miners_org and ask which you would 
 like to replace. It will then check my GitHub repository for new miners and ask which you would like 
 to add to smOS. It will then make a backup of the existing miner, download the new miner and create a 
 symlink in the selected directory.  Try to replace with similar, if you're adding a variant of 
@@ -30,3 +35,5 @@ ETH: 0x0f64257fAA9E5E36428E5BbB44C9A2aE3A055577
 ZEN: zndLiWRo7cYeAKuPArtpQ6HNPi6ZdaTmLFL
 
 BTC: 1BzrkEMSF4aXBtZ19DhVf8KMPVkXjXaAPG
+
+LOKI: LUtnMEXtzt9VTzA2tASXgXMXjWXN7xCuDZsvBYRhex6yRMNBUHZPC58TYhAhSX72heE3FzjbUbPEtXXdsJh3LhFqA4Lk82v

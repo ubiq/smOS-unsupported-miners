@@ -104,25 +104,25 @@ clear
 # Which miner to replace $smosMiner with?
 # =======================================================================================
 printf "Please select the miner to replace $smosMiner with:\n"
-select minerFork in ${githubMiners[@]%.gz}; do test -n "$minerFork" && break; echo ">>> Invalid Selection"; done
+select newMiner in ${githubMiners[@]%.gz}; do test -n "$newMiner" && break; echo ">>> Invalid Selection"; done
 clear
-echo "You're replacing $smosMiner with $minerFork"
+echo "You're replacing $smosMiner with $newMiner"
 # ---------------------------------------------------------------------------------------
 
 # =======================================================================================
 # Download miner
 # =======================================================================================
-minerForkURL=${githubJSON[$minerFork.gz]}
+newMinerURL=${githubJSON[$newMiner.gz]}
 # ---------------------------------------------------------------------------------------
 
 # =======================================================================================
 # Switch out miner and create masquerade symlink
 # =======================================================================================
 mv $minerRoot$smosMiner/$smosMinerBin $minerRoot$smosMiner/$smosMiner.backup
-curl -fsSL $minerForkURL | gunzip > $minerRoot$smosMiner/$minerFork
-chmod +x $minerRoot$smosMiner/$minerFork
-chown miner:miner $minerRoot$smosMiner/$minerFork
-ln -s $minerRoot$smosMiner/$minerFork $minerRoot$smosMiner/$smosMinerBin
+curl -fsSL $newMinerURL | gunzip > $minerRoot$smosMiner/$newMiner
+chmod +x $minerRoot$smosMiner/$newMiner
+chown miner:miner $minerRoot$smosMiner/$newMiner
+ln -s $minerRoot$smosMiner/$newMiner $minerRoot$smosMiner/$smosMinerBin
 clear
 # ---------------------------------------------------------------------------------------
 
@@ -130,12 +130,12 @@ clear
 # Done.
 # =======================================================================================
 echo "###"
-echo "$smosMiner is now $minerFork!"
+echo "$smosMiner is now $newMiner!"
 echo "###"
 echo ""
 # $minerRoot$smosMiner/$smosMinerBin --version
 echo ""
 echo "###"
-echo "You should now configure your Rig Group for $smosMiner remembering that it is $minerFork"
+echo "You should now configure your Rig Group for $smosMiner remembering that it is $newMiner"
 echo "###"
 # ---------------------------------------------------------------------------------------

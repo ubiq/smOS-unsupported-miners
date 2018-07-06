@@ -1,12 +1,27 @@
 #!/bin/bash
+# Author: Greerso https://github.com/greerso
+# Steemit:  https://steemit.com/@greerso
+#
+# BTC 1BzrkEMSF4aXBtZ19DhVf8KMPVkXjXaAPG
+# ETH 0x0f64257fAA9E5E36428E5BbB44C9A2aE3A055577
+# LTC LRf2oaNjLH18UtfXnr6GG34c3xv6To2XeZ
+# ZEC t1QCnCQstdgvZ5v3P9sZbeT9ViJd2pDfNBL
+# ZEN zndLiWRo7cYeAKuPArtpQ6HNPi6ZdaTmLFL
+# ZEL t1RdEHDboaRwpoBVQDuQ9bEpBmFqU1dFBR6
 
 # =======================================================================================
-# Run as root
+# Set Variables
 # =======================================================================================
-if [[ $(whoami) != "root" ]]; then
-    echo "Please run this script as root user"
-    exit 1
-fi
+# Location of smOS miners
+export NEWT_COLORS=''
+minerRoot="/root/miner_org/"
+smosMiners=($(ls $minerRoot))
+URL="https://api.github.com/repos/greerso/smOS-unsupported-miners/contents/miners"
+declare -A githubJSON="($(
+  curl -fsSL "${URL}" \
+  | jq '.[]  | "[" + .name + "]=\"" +.download_url + "\""' -r 
+))"
+IFS=$'\n' read -r -d '' -a githubMiners < <(set -o pipefail; curl --fail -kfsSL "https://api.github.com/repos/greerso/smOS-unsupported-miners/contents/miners" | jq -r '.[].name' && printf '\0')
 # ---------------------------------------------------------------------------------------
 
 # =======================================================================================
@@ -20,22 +35,28 @@ inputWithDefault() {
     userInput=${userInput:-$@}
     echo "$userInput"
 }
+
+IAmRoot() {
+	    if [ "$(id -nu)" != "root" ]; then
+    sudo -k
+    PASSWORD=$(whiptail --backtitle "I AM ROOT!" --title "Authentication required" --passwordbox "This script requires root privilege. Please authenticate to begin.\n\n[sudo] Password for user $USER:" 12 50 3>&2 2>&1 1>&3-)
+    exec sudo -E -S -p '' "$0" "$@" <<< "$PASSWORD"
+    exit 1
+    fi
+}
+
+#findBin [path]
+smosMinerBin() {
+	smosMinerBin="$(find $1 -maxdepth 1 -type f -executable -printf "%f\n" -quit)"
+}
+
 # ---------------------------------------------------------------------------------------
 
-# =======================================================================================
-# Set Variables
-# =======================================================================================
-# Location of smOS miners
-minerRoot="/root/miner_org/"
-smosMiners=($(ls $minerRoot))
-URL="https://api.github.com/repos/greerso/smOS-unsupported-miners/contents/miners"
-declare -A githubJSON="($(
-  curl -fsSL "${URL}" \
-  | jq '.[]  | "[" + .name + "]=\"" +.download_url + "\""' -r 
-))"
-IFS=$'\n' read -r -d '' -a githubMiners < <(set -o pipefail; curl --fail -kfsSL "https://api.github.com/repos/greerso/smOS-unsupported-miners/contents/miners" | jq -r '.[].name' && printf '\0')
 
-clear
+# =======================================================================================
+# Run as root
+# =======================================================================================
+IAmRoot
 # ---------------------------------------------------------------------------------------
 
 # =======================================================================================
@@ -43,7 +64,7 @@ clear
 # =======================================================================================
 printf "Please select the miner to replace:\n"
 select smosMiner in ${smosMiners[@]}; do test -n "$smosMiner" && break; echo ">>> Invalid Selection"; done
-smosMinerBin="$(find $minerRoot$smosMiner/ -maxdepth 1 -type f -size +512k -executable -printf "%f\n" -quit)"
+smosMinerBin $minerRoot$smosMiner/
 clear
 # ---------------------------------------------------------------------------------------
 

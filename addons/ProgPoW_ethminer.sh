@@ -9,7 +9,8 @@ rm bci_progpow_linux.zip
 cd /root/miner_org/ethminer-v0.15.0
 ln -s progpowminer_9.1 ethminer
 cd
-whiptail --msgbox 'Go to http://simplemining.net and setup a new rig group for ethminer-v0.15.0 that now supports ProgPoW. --backtitle "ProgPow" --title "ProgPow" 15
+whiptail --msgbox 'Go to http://simplemining.net and setup a new rig group for ethminer-v0.15.0 that 
+now supports ProgPoW.' --backtitle 'ProgPow' --title 'ProgPoW' 15
 55
 clear
 echo "                                                                           

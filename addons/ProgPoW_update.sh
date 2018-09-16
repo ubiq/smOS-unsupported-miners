@@ -5,7 +5,7 @@ wget https://www.bitcoininterest.io/downloads/bci_progpow_linux.zip
 unzip bci_progpow_linux.zip
 sudo rm -rf /root/miner_org/progpowminer-v0.15.0-dev0-cuda9.1
 sudo mv progpow_linux /root/miner_org/progpowminer-v0.15.0-dev0-cuda9.1
-chmod +x /root/miner_org/ethminer-v0.15.0/*
+chmod +x /root/miner_org/progpowminer-v0.15.0-dev0-cuda9.1/*
 rm bci_progpow_linux.zip
 cd /root/miner_org/progpowminer-v0.15.0-dev0-cuda9.1
 ln -s progpowminer_9.2 progpowminer
